@@ -1,0 +1,13 @@
+{
+    "name": "TimerCRM",
+    "alias": "timercrm",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
