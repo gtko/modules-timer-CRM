@@ -11,7 +11,6 @@
             minutes : '00',
             seconds :'00',
             init(){
-              console.log(this.actif, this.timerServer);
               if(this.actif){
                   this.timeCount();
               }
@@ -88,9 +87,4 @@
                 </span>
         </div>
     </div>
-
-
-    @push('scripts')
-
-    @endpush()
 </div>
