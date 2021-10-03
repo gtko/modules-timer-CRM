@@ -1,59 +1,56 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script>
-
-    function tiimer(){
-        return {
-            actif: @entangle('actif'),
-            timerServer : @entangle('countTimer'),
-            startTime : null,
-            timer : null,
-            hours: '00',
-            minutes : '00',
-            seconds :'00',
-            init(){
-              if(this.actif){
-                  this.timeCount();
-              }
-            },
-            timeCount(){
-                if(this.timerServer > 0) {
-                    let timeStr = moment.utc(this.timerServer*1000).format('HH:mm:ss');
-                    this.startTime = moment(timeStr, 'HH:mm:ss');
-                }else{
-                    this.startTime = moment('00:00:00', 'HH:mm:ss');
-                }
-                this.timer = setInterval(() => this.countDown(), 1000);
-            },
-            countDown(){
-                console.log('Count time');
-                this.startTime.add(1, "second");
-                this.hours = this.startTime.format("HH");
-                this.minutes = this.startTime.format("mm");
-                this.seconds = this.startTime.format("ss");
-            },
-            stopCount(){
-                clearInterval(this.timer);
-            },
-            resetCount(){
-                clearInterval(this.timer);
-                this.hours = '00';
-                this.minutes = '00';
-                this.seconds = '00';
-            },
-            start(){
-                @this.start()
-                this.timeCount()
-            },
-            stop(){
-                @this.stop()
-                this.stopCount()
-                this.resetCount()
-            },
+  function tiimer(){
+            return {
+                actif: @entangle('actif'),
+                timerServer : @entangle('countTimer'),
+                startTime : null,
+                timer : null,
+                hours: '00',
+                minutes : '00',
+                seconds :'00',
+                init(){
+                  if(this.actif){
+                      this.timeCount();
+                  }
+                },
+                timeCount(){
+                    if(this.timerServer > 0) {
+                        let timeStr = moment.utc(this.timerServer*1000).format('HH:mm:ss');
+                        this.startTime = moment(timeStr, 'HH:mm:ss');
+                    }else{
+                        this.startTime = moment('00:00:00', 'HH:mm:ss');
+                    }
+                    this.timer = setInterval(() => this.countDown(), 1000);
+                },
+                countDown(){
+                    console.log('Count time');
+                    this.startTime.add(1, "second");
+                    this.hours = this.startTime.format("HH");
+                    this.minutes = this.startTime.format("mm");
+                    this.seconds = this.startTime.format("ss");
+                },
+                stopCount(){
+                    clearInterval(this.timer);
+                },
+                resetCount(){
+                    clearInterval(this.timer);
+                    this.hours = '00';
+                    this.minutes = '00';
+                    this.seconds = '00';
+                },
+                start(){
+                    @this.start()
+                    this.timeCount()
+                },
+                stop(){
+                    @this.stop()
+                    this.stopCount()
+                    this.resetCount()
+                },
+            }
         }
-    }
 </script>
 <div class="text-white w-full" x-data="tiimer">
-
     <div class="my-4 shadow-2xl">
         <div class="flex flex-row justify-between px-4 py-2 bg-blue-400 rounded-t-lg ">
 
