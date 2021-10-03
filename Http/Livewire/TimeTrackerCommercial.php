@@ -2,6 +2,7 @@
 
 namespace Modules\TimerCRM\Http\Livewire;
 
+use Illuminate\Support\Facades\Auth;
 use Modules\TimerCRM\Contracts\Repositories\TimerRepositoryContract;
 use Modules\BaseCore\Models\User;
 use Carbon\Carbon;
@@ -21,9 +22,10 @@ class TimeTrackerCommercial extends Component
 
     public function mount(TimerRepositoryContract $repTimer)
     {
-
-
         $this->countTimer = $repTimer->fetchTimerStartedInSinceWhenTime(\Auth::commercial());
+
+
+
         $timer = $repTimer->fetchTimerStarted(\Auth::commercial());
 
         if ($timer) {
@@ -41,7 +43,6 @@ class TimeTrackerCommercial extends Component
     public function start(TimerRepositoryContract $repTimer)
     {
         $commercial = \Auth::commercial();
-
         $timer = $repTimer->fetchTimerStarted($commercial);
 
         if (!$timer) {
@@ -62,7 +63,11 @@ class TimeTrackerCommercial extends Component
 
     public function render(TimerRepositoryContract $repTimer)
     {
+        $commercial = \Auth::commercial();
+        if($commercial) {
+            return view('timercrm::livewire.time-tracker-commercial');
+        }
 
-        return view('timercrm::livewire.time-tracker-commercial');
+        return '';
     }
 }
