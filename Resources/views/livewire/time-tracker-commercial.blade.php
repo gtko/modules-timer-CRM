@@ -1,3 +1,4 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
   function tiimer(){
             return {
@@ -23,7 +24,6 @@
                     this.timer = setInterval(() => this.countDown(), 1000);
                 },
                 countDown(){
-                    console.log('Count time');
                     this.startTime.add(1, "second");
                     this.hours = this.startTime.format("HH");
                     this.minutes = this.startTime.format("mm");
