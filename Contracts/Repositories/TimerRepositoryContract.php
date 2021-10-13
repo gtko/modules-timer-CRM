@@ -19,5 +19,6 @@ interface TimerRepositoryContract extends RepositoryFetchable
     public function fetchTimerStarted(Commercial $commercial): ?Timer;
     public function fetchTimerStartedInSinceWhenTime(Commercial $commercial): int;
     public function getTimeByPeriode(Commercial $commercial, Carbon $dateStart, Carbon $dateEnd): ?Collection;
+    public function getTotalTimeByCommercialPeriode(Commercial $commercial, Carbon|null $debut, Carbon|null $fin): string;
 
 }

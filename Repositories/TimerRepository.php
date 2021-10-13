@@ -79,4 +79,21 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
         }
 
     }
+
+    public function getTotalTimeByCommercialPeriode(Commercial $commercial, ?Carbon $debut, ?Carbon $fin): string
+    {
+        if ($debut !== null && $fin !== null) {
+            $times = $this->getTimeByPeriode($commercial, $debut, $fin);
+
+        } else {
+            $times = $this->getTimeByPeriode($commercial, Carbon::Now()->subYears(20), Carbon::now());
+        }
+
+        $timesCount = 0;
+        foreach($times as $time)
+        {
+            $timesCount = $timesCount + $time->count;
+        }
+        return date('H\h i', $timesCount);
+    }
 }
