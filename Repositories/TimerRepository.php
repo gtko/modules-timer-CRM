@@ -96,4 +96,11 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
         }
         return date('H\h i', $timesCount);
     }
+
+    public function modifTime(Timer $timer, int $count): Timer
+    {
+        $timer->count = $count;
+        $timer->save();
+        return $timer;
+    }
 }
