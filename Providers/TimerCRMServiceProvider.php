@@ -3,6 +3,7 @@
 namespace Modules\TimerCRM\Providers;
 
 use Modules\BaseCore\Contracts\Services\CompositeurThemeContract;
+use Modules\BaseCore\Contracts\Views\AfterInMenuContract;
 use Modules\BaseCore\Contracts\Views\AfterMenuContract;
 use Modules\BaseCore\Contracts\Views\TopBarContract;
 use Modules\BaseCore\Entities\TypeView;
@@ -37,7 +38,7 @@ class TimerCRMServiceProvider extends ServiceProvider
 
         if(config('timercrm.display_widget', true)) {
             app(CompositeurThemeContract::class)
-                ->setViews(AfterMenuContract::class, [
+                ->setViews(AfterInMenuContract::class, [
                     'timercrm::time-tracker-commercial' => new TypeView(TypeView::TYPE_LIVEWIRE, 'timercrm::time-tracker-commercial')
                 ]);
         }
