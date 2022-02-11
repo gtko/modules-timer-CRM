@@ -82,6 +82,7 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
 
     public function getTotalTimeByCommercialPeriode(Commercial $commercial, ?Carbon $debut, ?Carbon $fin): string
     {
+
         if ($debut !== null && $fin !== null) {
             $times = $this->getTimeByPeriode($commercial, $debut, $fin);
 
