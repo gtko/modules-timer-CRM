@@ -61,11 +61,17 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
     }
 
 
-    public function getTimeByPeriode(Commercial $commercial, Carbon $dateStart, Carbon $dateEnd): ?Collection
+    public function getTimeByPeriode(Commercial $commercial, Carbon $dateStart = null, Carbon $dateEnd= null): ?Collection
     {
-        return Timer::whereHas('commercial', function ($query) use ($commercial){
-        $query->where('id', $commercial->id);
-    })->whereBetween('start', [$dateStart, $dateEnd])->orderBy('id', 'desc')->limit(5)->get();
+        $query =  Timer::whereHas('commercial', function ($query) use ($commercial){
+            $query->where('id', $commercial->id);
+        });
+
+        if($dateStart && $dateEnd) {
+            $query->whereBetween('start', [$dateStart, $dateEnd]);
+        }
+
+        return $query->orderBy('id', 'desc')->get();
     }
 
     public function fetchTimerStartedInSinceWhenTime(Commercial $commercial): int
