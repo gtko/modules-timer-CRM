@@ -7,6 +7,7 @@ namespace Modules\TimerCRM\Repositories;
 use Modules\BaseCore\Actions\Dates\ComputedDiffDateInSeconds;
 use Modules\BaseCore\Repositories\AbstractRepository;
 use Modules\CoreCRM\Models\Commercial;
+use Modules\TimerCRM\Contracts\Repositories\Commercialv;
 use Modules\TimerCRM\Models\Timer;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -47,7 +48,7 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
 
     public function getTimeInSeconds(Timer $timer): int
     {
-        $count =  (new ComputedDiffDateInSeconds())->getDates($timer->start->format('Y-m-d H:i:s'), Carbon::now()->format('Y-m-d H:i:s'));
+        $count = (new ComputedDiffDateInSeconds())->getDates($timer->start->format('Y-m-d H:i:s'), Carbon::now()->format('Y-m-d H:i:s'));
 
         return $count['duration'];
     }
@@ -55,20 +56,22 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
 
     public function fetchTimerStarted(Commercial $commercial): ?Timer
     {
-        return Timer::whereHas('commercial', function ($query) use ($commercial){
+        return Timer::whereHas('commercial', function ($query) use ($commercial) {
             $query->where('id', $commercial->id);
         })->whereNull('count')->first();
     }
 
 
-    public function getTimeByPeriode(Commercial $commercial, Carbon $dateStart = null, Carbon $dateEnd= null): ?Collection
+    public function getTimeByPeriode(Commercial $commercial, Carbon $dateStart = null, Carbon $dateEnd = null): ?Collection
     {
-        $query =  Timer::whereHas('commercial', function ($query) use ($commercial){
+//        dd($dateStart, $dateEnd);
+        $query = Timer::whereHas('commercial', function ($query) use ($commercial) {
             $query->where('id', $commercial->id);
         });
 
-        if($dateStart && $dateEnd) {
+        if ($dateStart && $dateEnd) {
             $query->whereBetween('start', [$dateStart, $dateEnd]);
+//
         }
 
         return $query->orderBy('id', 'desc')->get();
@@ -77,8 +80,7 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
     public function fetchTimerStartedInSinceWhenTime(Commercial $commercial): int
     {
         $timer = $this->fetchTimerStarted($commercial);
-        if(!is_null($timer))
-        {
+        if (!is_null($timer)) {
             return $timer->start->diffInSeconds(Carbon::now());
         } else {
             return 0;
@@ -97,8 +99,7 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
         }
 
         $timesCount = 0;
-        foreach($times as $time)
-        {
+        foreach ($times as $time) {
             $timesCount = $timesCount + $time->count;
         }
         return date('H\h i', $timesCount);
@@ -109,5 +110,21 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
         $timer->count = $count;
         $timer->save();
         return $timer;
+    }
+
+    public function add(Commercial $commercial, Carbon $dateStart, Carbon $dateEnd): Timer
+    {
+        $timer = new Timer();
+        $timer->start = $dateStart;
+        $timer->count = $dateStart->diffInSeconds($dateEnd);
+        $timer->commercial_id = $commercial->id;
+        $timer->save();
+
+        return $timer;
+    }
+
+    public function delete(Timer $timer): bool
+    {
+        return $timer->delete();
     }
 }
