@@ -4,6 +4,7 @@
 namespace Modules\TimerCRM\Repositories;
 
 
+use Carbon\CarbonInterval;
 use Modules\BaseCore\Actions\Dates\ComputedDiffDateInSeconds;
 use Modules\BaseCore\Actions\Dates\DateStringToCarbon;
 use Modules\BaseCore\Repositories\AbstractRepository;
@@ -103,7 +104,12 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
         foreach ($times as $time) {
             $timesCount = $timesCount + $time->count;
         }
-        return date('H\h i', $timesCount);
+
+        $dt = Carbon::now();
+        $hours = $dt->diffInHours($dt->copy()->addSeconds($timesCount));
+        $minutes = $dt->diffInMinutes($dt->copy()->addSeconds($timesCount)->subHours($hours));
+
+        return CarbonInterval::hours($hours)->minutes($minutes)->forHumans();
     }
 
     public function modifTime(Timer $timer, Carbon $start, Carbon $end): Timer
