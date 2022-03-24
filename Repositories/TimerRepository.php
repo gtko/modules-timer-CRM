@@ -5,6 +5,7 @@ namespace Modules\TimerCRM\Repositories;
 
 
 use Modules\BaseCore\Actions\Dates\ComputedDiffDateInSeconds;
+use Modules\BaseCore\Actions\Dates\DateStringToCarbon;
 use Modules\BaseCore\Repositories\AbstractRepository;
 use Modules\CoreCRM\Models\Commercial;
 use Modules\TimerCRM\Contracts\Repositories\Commercialv;
@@ -105,10 +106,16 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
         return date('H\h i', $timesCount);
     }
 
-    public function modifTime(Timer $timer, int $count): Timer
+    public function modifTime(Timer $timer, Carbon $start, Carbon $end): Timer
     {
-        $timer->count = $count;
+
+
+        $newCount = $start->diffInSeconds($end);
+
+        $timer->start = $start;
+        $timer->count = $newCount;
         $timer->save();
+
         return $timer;
     }
 
