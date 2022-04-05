@@ -105,11 +105,16 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
             $timesCount = $timesCount + $time->count;
         }
 
-        $dt = Carbon::now();
-        $hours = $dt->diffInHours($dt->copy()->addSeconds($timesCount));
-        $minutes = $dt->diffInMinutes($dt->copy()->addSeconds($timesCount)->subHours($hours));
+        if($timesCount > 0) {
 
-        return CarbonInterval::hours($hours)->minutes($minutes)->forHumans();
+            $dt = Carbon::now();
+            $hours = $dt->diffInHours($dt->copy()->addSeconds($timesCount));
+            $minutes = $dt->diffInMinutes($dt->copy()->addSeconds($timesCount)->subHours($hours));
+
+            return CarbonInterval::hours($hours)->minutes($minutes)->forHumans();
+        }
+
+        return 'Aucun temps';
     }
 
     public function modifTime(Timer $timer, Carbon $start, Carbon $end): Timer
