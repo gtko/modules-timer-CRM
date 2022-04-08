@@ -24,8 +24,6 @@ class TimeTrackerCommercial extends Component
     {
         $this->countTimer = $repTimer->fetchTimerStartedInSinceWhenTime(\Auth::commercial());
 
-
-
         $timer = $repTimer->fetchTimerStarted(\Auth::commercial());
 
         if ($timer) {
