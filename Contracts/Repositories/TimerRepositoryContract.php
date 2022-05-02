@@ -28,6 +28,7 @@ interface TimerRepositoryContract extends RepositoryFetchable
     public function getTimeByPeriode(Commercial $commercial, Carbon $dateStart = null, Carbon $dateEnd = null): ?Collection;
 
     public function getTotalTimeByCommercialPeriode(Commercial $commercial, Carbon|null $debut, Carbon|null $fin): string;
+    public function getTotalDaysPresentielByCommercialPeriode(Commercial $commercial, Carbon|null $debut, Carbon|null $fin): string;
 
     public function modifTime(Timer $timer, Carbon $start, Carbon $end): Timer;
 

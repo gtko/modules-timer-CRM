@@ -76,7 +76,7 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
 //
         }
 
-        return $query->orderBy('id', 'desc')->get();
+        return $query->orderBy('start', 'desc')->get();
     }
 
     public function fetchTimerStartedInSinceWhenTime(Commercial $commercial): int
@@ -115,6 +115,24 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
         }
 
         return 'Aucun temps';
+    }
+
+    public function getTotalDaysPresentielByCommercialPeriode(Commercial $commercial, ?Carbon $debut, ?Carbon $fin): string
+    {
+
+        if ($debut !== null && $fin !== null) {
+            $times = $this->getTimeByPeriode($commercial, $debut, $fin);
+
+        } else {
+            $times = $this->getTimeByPeriode($commercial, Carbon::Now()->subYears(20), Carbon::now());
+        }
+
+        $times = $times->map(function($time){
+            $time->date_group = $time->start->startOfDay()->format('Y-m-d');
+            return $time;
+        });
+
+        return $times->groupBy('date_group')->count();
     }
 
     public function modifTime(Timer $timer, Carbon $start, Carbon $end): Timer
