@@ -72,6 +72,10 @@ class TimerRepository extends AbstractRepository implements TimerRepositoryContr
         });
 
         if ($dateStart && $dateEnd) {
+
+            $dateStart->startOfDay();
+            $dateEnd->endOfDay();
+
             $query->whereBetween('start', [$dateStart, $dateEnd]);
 //
         }
